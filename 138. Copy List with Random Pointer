@@ -1,0 +1,55 @@
+class Solution {
+public:
+    unordered_map<Node*, Node*> cachedNode;
+
+    Node* copyRandomList(Node* head) {
+        if(head == nullptr)
+        {
+            return nullptr;
+        }
+        if(!cachedNode.count(head))
+        {
+            Node* headNew = new Node(head->val);
+            cachedNode[head] = headNew;
+            headNew->next = copyRandomList(head->next);
+            headNew->random = copyRandomList(head->random);
+        }
+        return cachedNode[head];
+    }
+};
+
+
+
+
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(head == nullptr)
+        {
+            return nullptr;
+        }
+        for(Node* node = head; node != nullptr ; node = node->next->next)
+        {
+            Node* nodeNew = new Node(node->val);
+            nodeNew->next = node->next;
+            node->next = nodeNew;
+        }
+        for(Node* node = head; node != nullptr; node = node->next->next)
+        {
+            if(node->random)
+            {
+                node->next->random = node->random->next;
+            }
+        }
+        Node* headNew = new Node(-1); 
+        Node* cur = headNew;
+        for(Node* node = head; node != nullptr; node = node->next)
+        {
+            Node* nodeNew = node->next;
+            node->next = node->next->next;
+            cur = cur->next = nodeNew;
+        }
+        return headNew->next;
+    }
+};
