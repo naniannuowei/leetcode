@@ -1,0 +1,48 @@
+class Solution {
+public:
+    bool exchange(const string& a, const string& b)
+    {
+        int time = 0;
+        int len = a.size();
+        for(int i=0; i<len; i++)
+        {
+            if(a[i] != b[i]) ++time;
+            if(time > 1) return false;
+        }
+
+        return time == 1;
+    }
+    
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> word_set(wordList.begin(), wordList.end());
+        if(word_set.count(endWord) == 0) return 0;
+
+        queue<string> q;
+        q.push(beginWord);
+
+        word_set.erase(beginWord);
+        int i = 1;
+
+        while(!q.empty())
+        {
+            int size = q.size();
+            for(int j=0; j<size; j++)
+            {
+                auto str = q.front(); q.pop();
+                vector<string> tmp;
+                for(const string& word : word_set)
+                {
+                    if(exchange(str, word))
+                    {
+                        if(word == endWord) return i+1;
+                        tmp.push_back(word);
+                        q.push(word);
+                    }
+                }
+                for(const auto& str:tmp) word_set.erase(str);
+            }
+            ++i;
+        }
+        return 0;
+    }
+};
