@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        int n = nums.size();
+        int left = 0, right = n - 1;
+        while(true)
+        {
+            int i = left, j = right;
+            int idx = rand() % (j - i + 1) + left;
+            swap(nums[left], nums[idx]);
+            while(i < j)
+            {
+                while(j > i && nums[j] >= nums[left]) --j;
+                while(j > i && nums[i] <= nums[left]) ++i;
+                swap(nums[i], nums[j]);
+            }
+            swap(nums[i], nums[left]);
+
+            if(i == n-k)
+            {
+                return nums[i];
+            }
+            else if(i > n-k)
+            {
+                right = i-1;
+            }
+            else
+            {
+                left = i+1;
+            }
+        }
+    }
+};
