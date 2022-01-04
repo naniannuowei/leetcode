@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        vector<vector<int>> res;
+        multiset<pair<int, int>> records;
+        for(auto building : buildings)
+        {
+            records.insert(make_pair(building[0], -building[2]));
+            records.insert(make_pair(building[1], building[2]));
+        }
+
+        multiset<int> heights;
+        heights.insert(0);
+        int lastMaxHeight = 0;
+        for(auto record : records)
+        {
+            if(record.second < 0)
+            {
+                heights.insert(-record.second);
+            }
+            else
+            {
+                heights.erase(heights.find(record.second));
+            }
+            int maxHeight = *heights.rbegin();
+            if( lastMaxHeight != maxHeight)
+            {
+                lastMaxHeight = maxHeight;
+                res.push_back({record.first, lastMaxHeight});
+            }
+        }
+
+        return res;
+    }
+};
