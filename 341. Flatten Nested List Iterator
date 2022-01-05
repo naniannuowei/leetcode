@@ -1,0 +1,78 @@
+class NestedIterator {
+private:
+    vector<int> vals;
+    vector<int>::iterator cur;
+
+    void dfs(const vector<NestedInteger> &nestedList)
+    {
+        for(auto &nest : nestedList)
+        {
+            if(nest.isInteger())
+            {
+                vals.push_back(nest.getInteger());
+            }
+            else
+            {
+                dfs(nest.getList());
+            }
+        }
+    }
+
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        dfs(nestedList);
+        cur = vals.begin();
+    }
+    
+    int next() {
+        return *cur++;
+    }
+    
+    bool hasNext() {
+        return cur != vals.end();
+    }
+};
+
+
+
+
+
+
+
+
+
+
+class NestedIterator {
+private:
+    stack<NestedInteger> st;
+
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        for(int i=nestedList.size() - 1; i>=0; --i)
+        {
+            st.push(nestedList[i]);
+        }
+    }
+    
+    int next() {
+        NestedInteger cur = st.top(); st.pop();
+        return cur.getInteger();
+    }
+    
+    bool hasNext() {
+        while(!st.empty())
+        {
+            NestedInteger cur = st.top();
+            if(cur.isInteger())
+            {
+                return true;
+            }
+            st.pop();
+            for(int i=cur.getList().size()-1; i>=0; --i)
+            {
+                st.push(cur.getList()[i]);
+            }
+        }
+        return false;
+    }
+};
