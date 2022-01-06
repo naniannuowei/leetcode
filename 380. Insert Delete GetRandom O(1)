@@ -1,0 +1,40 @@
+class RandomizedSet {
+private:
+    unordered_map<int, int> hash;
+    vector<int> array;
+
+public:
+    RandomizedSet() {
+
+    }
+    
+    bool insert(int val) {
+        if(hash.find(val) != hash.end())
+        {
+            return false;
+        }
+        array.push_back(val);
+        hash[val] = array.size()-1;
+        return true;
+    }
+    
+    bool remove(int val) {
+        if(hash.find(val) == hash.end())
+        {
+            return false;
+        }
+        int lastPos = array.size()-1;
+        int valPos = hash[val];
+        array[valPos] = array[lastPos];
+        array.pop_back();
+        hash[array[valPos]] = valPos;
+        hash.erase(val);
+        return true;
+    }
+    
+    int getRandom() {
+        int size = array.size();
+        int pos = rand() % size;
+        return array[pos];
+    }
+};
