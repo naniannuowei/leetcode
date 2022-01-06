@@ -1,0 +1,65 @@
+class Solution {
+private:
+    vector<int> res, temp, pos, temp2;
+    int n;
+    vector<int> nums;
+
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        this->nums = nums;
+        n = nums.size();
+        res = vector<int>(n, 0);
+        temp = vector<int>(n);
+        pos = vector<int>(n);
+        temp2 = vector<int>(n);
+        for(int i=0; i<n; ++i) pos[i] = i;
+
+        merge_sort(0, n-1);
+        return res;
+    }
+
+    void merge_sort(int left, int right)
+    {
+        if(left >= right) return;
+
+        int mid = left + (right - left) / 2;
+        merge_sort(left, mid), merge_sort(mid+1, right);
+
+        int i = left, j = mid + 1, k = left;
+        for(int x = left; x<=right; ++x) temp2[x] = pos[x];
+        while(i <= mid && j <= right)
+        {
+            if(nums[i] <= nums[j])
+            {
+                res[temp2[i]] += j-mid-1;
+                pos[k] = temp2[i];
+                temp[k] = nums[i];
+                k++;
+                i++;
+            }
+            else
+            {
+                pos[k] = temp2[j];
+                temp[k] = nums[j];
+                k++;
+                j++;
+            }
+        }
+        while(i <= mid)
+        {
+            res[temp2[i]] += j-mid-1;
+            pos[k] = temp2[i];
+            temp[k] = nums[i];
+            k++;
+            i++;
+        }
+        while(j <= right)
+        {
+            pos[k] = temp2[j];
+            temp[k] = nums[j];
+            k++;
+            j++;
+        }
+        for(i=left; i<=right; i++) nums[i] = temp[i];
+    }
+};
